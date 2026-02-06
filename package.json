@@ -1,0 +1,20 @@
+{
+  "name": "mesto-ad",
+  "version": "1.0.0",
+  "description": "Стартовый набор для Mesto",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PavelGubinS/mesto-ad.git"
+  },
+  "author": "PavelGubinS",
+  "type": "commonjs",
+  "homepage": "https://github.com/PavelGubinS/mesto-ad#readme",
+  "devDependencies": {
+    "vite": "^7.2.7"
+  }
+}
