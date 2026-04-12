@@ -50,6 +50,8 @@
                 class="popup__input popup__input_type_name"
                 placeholder="Имя"
                 required
+                minlength="2"
+                maxlength="40"
                 data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               />
             </label>
@@ -63,6 +65,8 @@
                 class="popup__input popup__input_type_description"
                 placeholder="Занятие"
                 required
+                minlength="2"
+                maxlength="200"
               />
             </label>
             <span class="popup__error" id="user-description-error"></span>
@@ -91,6 +95,8 @@
                 class="popup__input popup__input_type_card-name"
                 placeholder="Название"
                 required
+                minlength="2"
+                maxlength="30"
                 data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               />
             </label>
@@ -140,7 +146,6 @@
                 class="popup__input popup__input_type_avatar"
                 placeholder="Ссылка на изображение"
                 required
-                data-error-message="Введите корректную ссылку"
               />
             </label>
             <span class="popup__error" id="user-avatar-error"></span>
@@ -159,10 +164,30 @@
       <div class="popup popup_type_info">
         <div class="popup__content popup__content_content_info">
           <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Статистика карточек</h3>
+          <ul class="popup__info js-stats-rows"></ul>
+          <p class="popup__subtitle">Популярные карточки:</p>
+          <ul class="popup__list js-stats-popular"></ul>
+        </div>
+      </div>
+
+      <div class="popup popup_type_card-details">
+        <div class="popup__content popup__content_content_info">
+          <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Информация о карточке</h3>
-          <ul class="popup__info"></ul>
+          <ul class="popup__info js-card-details-rows"></ul>
           <p class="popup__subtitle">Лайкнули:</p>
-          <ul class="popup__list"></ul>
+          <ul class="popup__list js-card-details-likers"></ul>
+        </div>
+      </div>
+
+      <div class="popup popup_type_remove-card">
+        <div class="popup__content">
+          <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Вы уверены?</h3>
+          <form class="popup__form" id="remove-card-form">
+            <button type="submit" class="popup__button">Да</button>
+          </form>
         </div>
       </div>
     </div>
