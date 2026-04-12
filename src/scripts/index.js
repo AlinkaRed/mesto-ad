@@ -172,7 +172,9 @@ const handleEditFormSubmit = (evt) => {
       profileDescription.textContent = userData.about;
       closeModalWindow(editPopup);
     })
-    .catch(() => {})
+    .catch((err) => {
+      console.log(err);
+    })
     .finally(() => {
       editSubmitButton.textContent = 'Сохранить';
       nameInput.dispatchEvent(new Event('input', { bubbles: true }));
@@ -204,7 +206,9 @@ const handleAddFormSubmit = (evt) => {
       closeModalWindow(addPopup);
       addForm.reset();
     })
-    .catch(() => {})
+    .catch((err) => {
+      console.log(err);
+    })
     .finally(() => {
       addSubmitButton.textContent = 'Создать';
       cardNameInput.dispatchEvent(new Event('input', { bubbles: true }));
@@ -223,7 +227,9 @@ const handleAvatarFormSubmit = (evt) => {
       closeModalWindow(avatarPopup);
       avatarForm.reset();
     })
-    .catch(() => {})
+    .catch((err) => {
+      console.log(err);
+    })
     .finally(() => {
       avatarSubmitButton.textContent = 'Сохранить';
       avatarInput.dispatchEvent(new Event('input', { bubbles: true }));
@@ -237,7 +243,9 @@ const handleLikeClick = (cardId, likeButton, likeCountElement) => {
       likeButton.classList.toggle('card__like-button_is-active', !isLiked);
       likeCountElement.textContent = updatedCard.likes.length;
     })
-    .catch(() => {});
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const handleDeleteClick = (cardId, cardElement) => {
@@ -261,7 +269,9 @@ const handleRemoveCardSubmit = (evt) => {
       closeModalWindow(removePopup);
       pendingDelete = null;
     })
-    .catch(() => {})
+    .catch((err) => {
+      console.log(err);
+    })
     .finally(() => {
       removeSubmitButton.textContent = 'Да';
       removeSubmitButton.disabled = false;
@@ -305,7 +315,9 @@ const handleInfoClick = (cardId) => {
 
       openModalWindow(cardDetailsPopup);
     })
-    .catch(() => {});
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const handleLogoClick = () => {
@@ -337,7 +349,9 @@ const handleLogoClick = () => {
 
       openModalWindow(statsPopup);
     })
-    .catch(() => {});
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 editButton.addEventListener('click', () => {
@@ -380,7 +394,9 @@ Promise.all([getCardList(), getUserInfo()])
       cardsList.append(createCard(cardData, cardHandlers, currentUserId));
     });
   })
-  .catch(() => {});
+  .catch((err) => {
+    console.log(err);
+  });
 
 document.querySelectorAll('.popup').forEach((popup) => {
   setCloseModalWindowEventListeners(popup);

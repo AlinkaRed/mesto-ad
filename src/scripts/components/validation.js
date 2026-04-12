@@ -1,6 +1,3 @@
-/** Допустимые символы для полей «Имя» и «Название» (латиница, кириллица, дефис, пробел) */
-const NAME_LIKE_PATTERN = /^[a-zA-Zа-яА-ЯёЁ\s-]+$/;
-
 function showInputError(form, input, message, config) {
   const errorSpan = form.querySelector(`#${input.id}-error`);
   if (!errorSpan) return;
@@ -18,31 +15,52 @@ function hideInputError(form, input, config) {
 }
 
 /**
- * Синхронизирует кастомное ограничение для полей «имя/название» с регулярным выражением.
- * Остальные проверки (required, min/max length, type=url) — стандартные, тексты из validationMessage.
+ * Возвращает текст ошибки или пустую строку, если поле допустимо.
+ * Селекторы специфики полей задаются только через config извне.
+ * Ограничения HTML5 (required, minlength/maxlength, pattern, type=url) задаются в разметке;
+ * для полей с pattern при несовпадении показываем текст из data-error-message.
  */
-function syncInputValidity(input, config) {
+function getInputErrorMessage(form, input, config) {
+  const requiredEmpty =
+    input.hasAttribute('required') && !input.value.trim();
+
+  if (requiredEmpty) {
+    return input.validationMessage || 'Заполните это поле';
+  }
+
   const isNameLike =
     config.namePatternFieldSelector &&
     input.matches(config.namePatternFieldSelector);
 
   if (isNameLike) {
-    if (input.value.length > 0 && !NAME_LIKE_PATTERN.test(input.value)) {
-      const msg = input.dataset.errorMessage;
-      input.setCustomValidity(msg || ' ');
-    } else {
-      input.setCustomValidity('');
+    if (input.validity.patternMismatch) {
+      return (
+        input.dataset.errorMessage ||
+        input.validationMessage ||
+        'Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы'
+      );
     }
-  } else {
-    input.setCustomValidity('');
+    if (!input.validity.valid) {
+      return input.validationMessage || 'Заполните это поле';
+    }
+    return '';
   }
-}
 
-function getInputErrorMessage(form, input, config) {
-  syncInputValidity(input, config);
+  const isUrlField =
+    config.urlFieldSelector && input.matches(config.urlFieldSelector);
+
+  if (isUrlField) {
+    if (!input.validity.valid) {
+      return input.validationMessage;
+    }
+    return '';
+  }
+
+  // Остальные поля (например, описание): встроенные ограничения HTML5
   if (!input.validity.valid) {
     return input.validationMessage;
   }
+
   return '';
 }
 
@@ -100,10 +118,7 @@ function setEventListeners(form, config) {
 
 function clearValidation(form, config) {
   const inputs = form.querySelectorAll(config.inputSelector);
-  inputs.forEach((input) => {
-    input.setCustomValidity('');
-    hideInputError(form, input, config);
-  });
+  inputs.forEach((input) => hideInputError(form, input, config));
   disableSubmitButton(form, config);
 }
 
