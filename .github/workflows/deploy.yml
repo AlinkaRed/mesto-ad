@@ -1,0 +1,40 @@
+# Деплой сборки (папка dist) в отдельный публичный репозиторий для GitHub Pages.
+# Секреты в приватном репозитории: Settings → Secrets and variables → Actions
+#   PUBLIC_REPO_TOKEN — Personal Access Token с правом push в публичный репозиторий
+#   PUBLIC_REPO_NAME  — полное имя репозитория, например: your-username/mesto-pages
+
+name: Deploy to GitHub Pages (public repo)
+
+on:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to public repository
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
+          repository-name: ${{ secrets.PUBLIC_REPO_NAME }}
+          token: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          clean: true
