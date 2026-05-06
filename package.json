@@ -1,20 +1,28 @@
 {
   "name": "mesto-ad",
   "version": "1.0.0",
-  "description": "Стартовый набор для Mesto",
+  "description": "Стартовый набор для выполнения проектной работы Место",
   "main": "index.js",
+  "devDependencies": {
+    "gh-pages": "^6.3.0",
+    "vite": "^8.0.9"
+  },
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PavelGubinS/mesto-ad.git"
+    "url": "git+https://github.com/RealProstatus/mesto-ad.git"
   },
-  "author": "PavelGubinS",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "type": "commonjs",
-  "homepage": "https://github.com/PavelGubinS/mesto-ad#readme",
-  "devDependencies": {
-    "vite": "^7.2.7"
-  }
+  "bugs": {
+    "url": "https://github.com/RealProstatus/mesto-ad/issues"
+  },
+  "homepage": "https://github.com/RealProstatus/mesto-ad#readme"
 }

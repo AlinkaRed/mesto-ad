@@ -1,144 +1,96 @@
-function showInputError(form, input, message, config) {
-  const errorSpan = form.querySelector(`#${input.id}-error`);
+function showInputError(formElement, inputElement, message, validationConfig) {
+  const errorSpan = formElement.querySelector(`#${inputElement.id}-error`);
   if (!errorSpan) return;
   errorSpan.textContent = message;
-  errorSpan.classList.add(config.errorClass);
-  input.classList.add(config.inputErrorClass);
+  errorSpan.classList.add(validationConfig.errorClass);
+  inputElement.classList.add(validationConfig.inputErrorClass);
 }
 
-function hideInputError(form, input, config) {
-  const errorSpan = form.querySelector(`#${input.id}-error`);
+function hideInputError(formElement, inputElement, validationConfig) {
+  const errorSpan = formElement.querySelector(`#${inputElement.id}-error`);
   if (!errorSpan) return;
   errorSpan.textContent = '';
-  errorSpan.classList.remove(config.errorClass);
-  input.classList.remove(config.inputErrorClass);
+  errorSpan.classList.remove(validationConfig.errorClass);
+  inputElement.classList.remove(validationConfig.inputErrorClass);
 }
 
-/**
- * Возвращает текст ошибки или пустую строку, если поле допустимо.
- * Селекторы специфики полей задаются только через config извне.
- * Ограничения HTML5 (required, minlength/maxlength, pattern, type=url) задаются в разметке;
- * для полей с pattern при несовпадении показываем текст из data-error-message.
- */
-function getInputErrorMessage(form, input, config) {
-  const requiredEmpty =
-    input.hasAttribute('required') && !input.value.trim();
-
-  if (requiredEmpty) {
-    return input.validationMessage || 'Заполните это поле';
+function getInputErrorMessage(inputElement) {
+  if (inputElement.validity.patternMismatch) {
+    inputElement.setCustomValidity(inputElement.dataset.errorMessage || '');
+  } else {
+    inputElement.setCustomValidity('');
   }
 
-  const isNameLike =
-    config.namePatternFieldSelector &&
-    input.matches(config.namePatternFieldSelector);
-
-  if (isNameLike) {
-    if (input.validity.patternMismatch) {
-      return (
-        input.dataset.errorMessage ||
-        input.validationMessage ||
-        'Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы'
-      );
-    }
-    if (!input.validity.valid) {
-      return input.validationMessage || 'Заполните это поле';
-    }
-    return '';
+  if (!inputElement.validity.valid) {
+    return inputElement.validationMessage;
   }
-
-  const isUrlField =
-    config.urlFieldSelector && input.matches(config.urlFieldSelector);
-
-  if (isUrlField) {
-    if (!input.validity.valid) {
-      return input.validationMessage;
-    }
-    return '';
-  }
-
-  // Остальные поля (например, описание): встроенные ограничения HTML5
-  if (!input.validity.valid) {
-    return input.validationMessage;
-  }
-
   return '';
 }
 
-function checkInputValidity(form, input, config) {
-  const message = getInputErrorMessage(form, input, config);
+function checkInputValidity(formElement, inputElement, validationConfig) {
+  const message = getInputErrorMessage(inputElement);
   if (message) {
-    showInputError(form, input, message, config);
+    showInputError(formElement, inputElement, message, validationConfig);
   } else {
-    hideInputError(form, input, config);
+    hideInputError(formElement, inputElement, validationConfig);
   }
 }
 
-function hasInvalidInput(form, config) {
-  const inputs = Array.from(form.querySelectorAll(config.inputSelector));
-  return inputs.some((input) => getInputErrorMessage(form, input, config) !== '');
+function hasInvalidInput(formElement, validationConfig) {
+  const inputElements = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
+  return inputElements.some((inputElement) => getInputErrorMessage(inputElement) !== '');
 }
 
-function disableSubmitButton(form, config) {
-  const btn = form.querySelector(config.submitButtonSelector);
-  if (!btn) return;
-  btn.disabled = true;
-  btn.classList.add(config.inactiveButtonClass);
+function disableSubmitButton(formElement, validationConfig) {
+  const submitButton = formElement.querySelector(validationConfig.submitButtonSelector);
+  if (!submitButton) return;
+  submitButton.disabled = true;
+  submitButton.classList.add(validationConfig.inactiveButtonClass);
 }
 
-function enableSubmitButton(form, config) {
-  const btn = form.querySelector(config.submitButtonSelector);
-  if (!btn) return;
-  btn.disabled = false;
-  btn.classList.remove(config.inactiveButtonClass);
+function enableSubmitButton(formElement, validationConfig) {
+  const submitButton = formElement.querySelector(validationConfig.submitButtonSelector);
+  if (!submitButton) return;
+  submitButton.disabled = false;
+  submitButton.classList.remove(validationConfig.inactiveButtonClass);
 }
 
-function toggleButtonState(form, config) {
-  const invalid = hasInvalidInput(form, config);
-  const extraDisabled =
-    typeof config.submitButtonExtraDisabled === 'function'
-      ? config.submitButtonExtraDisabled(form)
-      : false;
-
-  if (invalid || extraDisabled) {
-    disableSubmitButton(form, config);
+function toggleButtonState(formElement, validationConfig) {
+  if (hasInvalidInput(formElement, validationConfig)) {
+    disableSubmitButton(formElement, validationConfig);
   } else {
-    enableSubmitButton(form, config);
+    enableSubmitButton(formElement, validationConfig);
   }
 }
 
-function setEventListeners(form, config) {
-  const inputs = form.querySelectorAll(config.inputSelector);
-  inputs.forEach((input) => {
-    input.addEventListener('input', () => {
-      checkInputValidity(form, input, config);
-      toggleButtonState(form, config);
+function setEventListeners(formElement, validationConfig) {
+  const inputElements = formElement.querySelectorAll(validationConfig.inputSelector);
+  inputElements.forEach((inputElement) => {
+    inputElement.addEventListener('input', () => {
+      checkInputValidity(formElement, inputElement, validationConfig);
+      toggleButtonState(formElement, validationConfig);
     });
   });
 }
 
-function clearValidation(form, config) {
-  const inputs = form.querySelectorAll(config.inputSelector);
-  inputs.forEach((input) => hideInputError(form, input, config));
-  disableSubmitButton(form, config);
+function clearValidation(formElement, validationConfig) {
+  const inputElements = formElement.querySelectorAll(validationConfig.inputSelector);
+  inputElements.forEach((inputElement) => {
+    inputElement.setCustomValidity('');
+    hideInputError(formElement, inputElement, validationConfig);
+  });
+  disableSubmitButton(formElement, validationConfig);
 }
 
-function enableValidation(config) {
-  const forms = document.querySelectorAll(config.formSelector);
-  forms.forEach((form) => {
-    setEventListeners(form, config);
-    toggleButtonState(form, config);
+function enableValidation(validationConfig) {
+  const formElements = document.querySelectorAll(validationConfig.formSelector);
+  formElements.forEach((formElement) => {
+    setEventListeners(formElement, validationConfig);
+    toggleButtonState(formElement, validationConfig);
   });
 }
 
 export {
-  showInputError,
-  hideInputError,
-  checkInputValidity,
-  hasInvalidInput,
-  disableSubmitButton,
-  enableSubmitButton,
-  toggleButtonState,
-  setEventListeners,
   clearValidation,
   enableValidation
 };
