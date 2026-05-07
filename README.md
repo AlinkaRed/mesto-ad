@@ -2,7 +2,7 @@
 
 Проектная работа Mesto — интерактивная страница с карточками мест, лайками и профилем пользователя.
 
-Опубликованный проект: [https://github.com/AlinkaRed/mesto-p](https://github.com/AlinkaRed/mesto-p)
+Опубликованный проект: [https://alinkared.github.io/mesto-p/](https://alinkared.github.io/mesto-p/)
 
 ## Команды проекта
 
