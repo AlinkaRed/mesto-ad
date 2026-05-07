@@ -71,6 +71,10 @@ export const toggleLike = (likeButton, likeCountElement, updatedLikesCount) => {
   likeCountElement.textContent = updatedLikesCount;
 };
 
+export const isCardLiked = (likeButton) => {
+  return likeButton.classList.contains('card__like-button_is-active');
+};
+
 export const deleteCard = (cardElement) => {
   cardElement.remove();
 };

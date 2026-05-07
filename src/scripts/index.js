@@ -10,7 +10,7 @@ import {
   changeLikeCardStatus
 } from './components/api.js';
 
-import { createCard, toggleLike, deleteCard } from './components/card.js';
+import { createCard, toggleLike, deleteCard, isCardLiked } from './components/card.js';
 import {
   openModalWindow,
   closeModalWindow,
@@ -159,7 +159,7 @@ function handleAvatarUpdateFormSubmit(event) {
 }
 
 function handleCardLikeButtonClick(cardId, likeButtonElement, likeCountElement) {
-  const isLiked = likeButtonElement.classList.contains('card__like-button_is-active');
+  const isLiked = isCardLiked(likeButtonElement);
   changeLikeCardStatus(cardId, isLiked)
     .then((updatedCard) => {
       toggleLike(likeButtonElement, likeCountElement, updatedCard.likes.length);
