@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RealProstatus/mesto-ad.git"
+    "url": "git+https://github.com/AlinkaRed/mesto-ad.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/RealProstatus/mesto-ad/issues"
+    "url": "https://github.com/AlinkaRed/mesto-ad/issues"
   },
-  "homepage": "https://github.com/RealProstatus/mesto-ad#readme"
+  "homepage": "https://github.com/AlinkaRed/mesto-ad#readme"
 }
